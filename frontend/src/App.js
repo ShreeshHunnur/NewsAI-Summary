@@ -36,20 +36,19 @@ function App() {
     setNewsItems(null);
     
     try {
-      const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
-      const response = await fetch(`${API_URL}/api/news-summary`, {
+      const response = await fetch('https://7h3wocckd7.execute-api.ap-south-1.amazonaws.com/news_summary', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ keyword: normalizedKeyword }),
+        body: JSON.stringify({ category: normalizedKeyword }),
       });
       
       const data = await response.json();
       if (data.error) {
         setError(data.error);
       } else {
-        setNewsItems(data);
+        setNewsItems(data.body ? JSON.parse(data.body) : data);
       }
     } catch (error) {
       console.error('Error:', error);
